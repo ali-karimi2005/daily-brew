@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<!-- The Daily Brew — سایت کافهٔ ریترو | ساخته‌شده توسط alirezakarimi -->
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>The Daily Brew</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&family=Abril+Fatface&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Kaushan+Script&display=swap" rel="stylesheet">
+  <style>
+    /* بخش ۱ — تنظیمات پایه: متغیرهای رنگ، ریست و فونت */
+    :root {
+      --bg:#1a100a;
+      --card:#2b1a0f;
+      --cr:#f3e2c0;
+      --ac:#d9582b;
+      --go:#e8a53a;
+      --mu:#b89a74;
+      box-sizing:border-box;
+      padding-top:env(safe-area-inset-top,0px);
+      color-scheme:dark;
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+    }
+
+    html {
+      scroll-behavior:smooth;
+      scroll-padding-top:70px;
+    }
+
+    body {
+      background:var(--bg) radial-gradient(circle at 80% 0,#3a2111,transparent 50%);
+      color:var(--cr);
+      font-family:Vazirmatn,Tahoma,sans-serif;
+      line-height:1.8;
+      padding-bottom:80px;
+      min-height:100vh;
+    }
+
+    
+    body:before {
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.07;
+      background:repeating-radial-gradient(#fff 0 1px,transparent 1px 3px);
+      z-index:90;
+    }
+
+    h1,h2,.lg {
+      font-family:'Abril Fatface',Georgia,serif;
+      font-weight:400;
+    }
+
+    button,input,select,textarea {
+      font:inherit;
+      color:inherit;
+    }
+
+    /* دکمه‌های عمومی */
+    .btn {
+      background:var(--ac);
+      border:2px solid var(--cr);
+      color:var(--cr);
+      padding:.5rem 1.2rem;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      box-shadow:3px 3px 0 var(--cr);
+      transition:.15s;
+    }
+
+    .btn:active {
+      transform:translate(3px,3px);
+      box-shadow:none;
+    }
+
+    .btn.o {
+      background:none;
+    }
+
+    .btn.s {
+      padding:.2rem .8rem;
+      font-size:.9rem;
+    }
+
+    /* بخش ۲ — صفحهٔ لودینگ (فنجان قهوه و نوار پیشرفت) */
+    #ld {
+      position:fixed;
+      inset:0;
+      background:#120a05;
+      z-index:999;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      transition:opacity .7s,visibility .7s;
+    }
+
+    #ld.x {
+      opacity:0;
+      visibility:hidden;
+    }
+
+    #ld svg {
+      width:170px;
+      overflow:visible;
+    }
+
+    .st {
+      stroke:var(--mu);
+      stroke-width:5;
+      fill:none;
+      stroke-linecap:round;
+      stroke-dasharray:30 20;
+      animation:st 2s linear infinite;
+      opacity:.8;
+    }
+
+    .st:nth-child(2) {
+      animation-delay:.5s;
+    }
+
+    .st:nth-child(3) {
+      animation-delay:1s;
+    }
+
+    @keyframes st {
+      to {
+        stroke-dashoffset:-100;
+      }
+    }
+
+    #fl {
+      animation:fl 2.4s ease-in-out forwards;
+    }
+
+    @keyframes fl {
+      from {
+        transform:translateY(60px);
+      }
+      to {
+        transform:translateY(0);
+      }
+    }
+
+    #ld .lg {
+      font-size:2.2rem;
+      letter-spacing:2px;
+      animation:gl 1.5s infinite alternate;
+    }
+
+    @keyframes gl {
+      from {
+        text-shadow:0 0 4px var(--ac);
+      }
+      to {
+        text-shadow:0 0 22px var(--go);
+      }
+    }
+
+    .bar {
+      width:220px;
+      height:8px;
+      border:2px solid var(--cr);
+      border-radius:8px;
+      overflow:hidden;
+    }
+
+    .bar i {
+      display:block;
+      height:100%;
+      width:0;
+      background:var(--go);
+      animation:bw 2.4s ease-in-out forwards;
+    }
+
+    @keyframes bw {
+      to {
+        width:100%;
+      }
+    }
+
+    /* بخش ۳ — هدر و منوی ناوبری (در موبایل به نوار پایین صفحه تبدیل می‌شود) */
+    header {
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:#120a05ee;
+      backdrop-filter:blur(6px);
+      border-bottom:2px dashed var(--mu);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:.6rem 1rem;
+    }
+
+    .logo {
+      font-family:'Abril Fatface',serif;
+      font-size:1.5rem;
+      color:var(--go);
+      cursor:pointer;
+    }
+
+    nav {
+      display:flex;
+      gap:.3rem;
+    }
+
+    nav button {
+      background:none;
+      border:0;
+      cursor:pointer;
+      padding:.3rem .8rem;
+      border-radius:20px;
+      color:var(--cr);
+      position:relative;
+    }
+
+    nav button:hover,nav button.on {
+      background:var(--ac);
+    }
+
+    nav b {
+      position:absolute;
+      top:-4px;
+      left:2px;
+      background:var(--go);
+      color:#000;
+      border-radius:50%;
+      font-size:.7rem;
+      min-width:18px;
+      line-height:18px;
+      text-align:center;
+    }
+
+    @media(max-width:760px) {
+      nav {
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        background:#120a05;
+        border-top:2px solid var(--mu);
+        justify-content:space-around;
+        padding:.3rem .2rem calc(.3rem + env(safe-area-inset-bottom,0px));
+        z-index:60;
+      }
+      nav button {
+        font-size:.78rem;
+        padding:.2rem .4rem;
+        text-align:center;
+        line-height:1.3;
+      }
+      nav button span {
+        display:block;
+        font-size:1.2rem;
+      }
+    }
+
+    @media(min-width:761px) {
+      nav button span {
+        display:none;
+      }
+    }
+
+    /* بخش ۴ — چیدمان کلی و تیتر بخش‌ها */
+    .w {
+      max-width:1050px;
+      margin:auto;
+      padding:0 1rem;
+    }
+
+    section.p {
+      padding:2.5rem 0;
+    }
+
+    h2 {
+      font-size:2rem;
+      color:var(--go);
+      text-align:center;
+      margin-bottom:1.2rem;
+    }
+
+    h2:after {
+      content:"✦ ✦ ✦";
+      display:block;
+      font-size:.8rem;
+      color:var(--mu);
+      font-family:Vazirmatn;
+    }
+
+    /* بخش ۵ — هیرو و نوار متحرک (نسخهٔ اولیه؛ در ادامه بازنویسی شده‌اند) */
+    .hero {
+      min-height:80vh;
+      display:flex;
+      align-items:center;
+      text-align:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:1rem;
+      padding:3rem 1rem;
+    }
+
+    .hero h1 {
+      font-size:clamp(2.8rem,10vw,6rem);
+      line-height:1.1;
+      color:var(--cr);
+      text-shadow:4px 4px 0 var(--ac);
+    }
+
+    .badge {
+      border:3px double var(--go);
+      color:var(--go);
+      padding:.2rem 1.2rem;
+      border-radius:40px;
+      letter-spacing:3px;
+      animation:fi 1s;
+    }
+
+    .cupb {
+      font-size:5rem;
+      animation:bob 3s ease-in-out infinite;
+    }
+
+    @keyframes bob {
+      50% {
+        transform:translateY(-12px) rotate(4deg);
+      }
+    }
+
+    @keyframes fi {
+      from {
+        opacity:0;
+        transform:translateY(20px);
+      }
+    }
+
+    .mq {
+      background:var(--ac);
+      overflow:hidden;
+      white-space:nowrap;
+      border-block:3px solid var(--cr);
+      padding:.3rem 0;
+    }
+
+    .mq div {
+      display:inline-block;
+      animation:mq 25s linear infinite;
+      font-weight:700;
+    }
+
+    @keyframes mq {
+      to {
+        transform:translateX(50%);
+      }
+    }
+
+    /* بخش ۶ — منو، کارت‌ها، فرم‌ها و نظرات */
+    .chips {
+      display:flex;
+      gap:.5rem;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-bottom:1rem;
+    }
+
+    .chips button {
+      background:none;
+      border:2px solid var(--mu);
+      border-radius:20px;
+      padding:.1rem 1rem;
+      cursor:pointer;
+    }
+
+    .chips button.on {
+      background:var(--go);
+      color:#000;
+      border-color:var(--go);
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
+      gap:1rem;
+    }
+
+    .it {
+      background:var(--card);
+      border:2px solid var(--mu);
+      border-radius:12px;
+      padding:1rem;
+      position:relative;
+      transition:.2s;
+      animation:fi .5s;
+    }
+
+    .it:hover {
+      transform:translateY(-4px) rotate(-.5deg);
+      border-color:var(--go);
+    }
+
+    .it .e {
+      font-size:2.8rem;
+    }
+
+    .it h3 {
+      font-size:1.1rem;
+    }
+
+    .it p {
+      color:var(--mu);
+      font-size:.85rem;
+    }
+
+    .pr {
+      color:var(--go);
+      font-weight:900;
+      margin:.3rem 0;
+    }
+
+    .hb {
+      position:absolute;
+      top:8px;
+      left:8px;
+      background:none;
+      border:0;
+      font-size:1.4rem;
+      cursor:pointer;
+    }
+
+    .bx {
+      background:var(--card);
+      border:2px solid var(--mu);
+      border-radius:12px;
+      padding:1.2rem;
+      margin-bottom:1rem;
+    }
+
+    .fm {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:.7rem;
+    }
+
+    .fm input,.fm select,.fm textarea {
+      background:#120a05;
+      border:2px solid var(--mu);
+      border-radius:8px;
+      padding:.5rem;
+      width:100%;
+    }
+
+    .fm .f {
+      grid-column:1/-1;
+    }
+
+    label {
+      font-size:.85rem;
+      color:var(--mu);
+    }
+
+    .rv {
+      border-bottom:1px dashed var(--mu);
+      padding:.6rem 0;
+    }
+
+    .str {
+      color:var(--go);
+      letter-spacing:2px;
+    }
+
+    .stars span {
+      font-size:1.8rem;
+      cursor:pointer;
+      color:var(--mu);
+    }
+
+    .stars span.on {
+      color:var(--go);
+    }
+
+    .row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:.5rem;
+      padding:.5rem 0;
+      border-bottom:1px dashed #5a4126;
+      flex-wrap:wrap;
+    }
+
+    .q {
+      display:inline-flex;
+      gap:.5rem;
+      align-items:center;
+    }
+
+    .q button {
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      border:2px solid var(--cr);
+      background:none;
+      cursor:pointer;
+    }
+
+    /* آمار و نمودار پنل مدیریت */
+    .sg {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:.8rem;
+      margin-bottom:1rem;
+    }
+
+    .sg .bx {
+      text-align:center;
+      margin:0;
+    }
+
+    .sg b {
+      display:block;
+      font-size:1.6rem;
+      color:var(--go);
+    }
+
+    .ch div {
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      margin:.3rem 0;
+    }
+
+    .ch i {
+      display:block;
+      height:18px;
+      background:var(--ac);
+      border-radius:4px;
+      transition:width 1s;
+    }
+
+    /* کارت موقعیت کافه */
+    .map {
+      border:3px solid var(--cr);
+      border-radius:12px;
+      padding:1.2rem;
+      background:repeating-linear-gradient(45deg,#2b1a0f,#2b1a0f 14px,#33200f 14px,#33200f 28px);
+      text-align:center;
+    }
+
+    .pin {
+      font-size:3rem;
+      animation:bob 2s infinite;
+    }
+
+    /* فوتر */
+    footer {
+      text-align:center;
+      border-top:3px double var(--mu);
+      padding:2rem 1rem;
+      color:var(--mu);
+    }
+
+    footer a {
+      color:var(--go);
+      text-decoration:none;
+      font-weight:700;
+      margin:0 .4rem;
+    }
+
+    /* پیام کوتاه (Toast) و کلاس‌های کمکی */
+    #ts {
+      position:fixed;
+      top:70px;
+      left:50%;
+      transform:translateX(-50%);
+      background:var(--go);
+      color:#000;
+      padding:.5rem 1.2rem;
+      border-radius:8px;
+      z-index:200;
+      font-weight:700;
+      opacity:0;
+      transition:.3s;
+      pointer-events:none;
+    }
+
+    #ts.on {
+      opacity:1;
+    }
+
+    .view[hidden] {
+      display:none;
+    }
+
+    .tb {
+      width:100%;
+      overflow-x:auto;
+    }
+
+    .sm {
+      font-size:.8rem;
+      color:var(--mu);
+    }
+
+    /* بخش ۷ — تم ریترو (روی استایل‌های بالا اعمال می‌شود) */
+    :root {
+      --img:url(hero.jpg);
+      --bg:#140b06;
+      --ac:#e8742f;
+    }
+
+    body {
+      background:#140b06;
+      position:relative;
+    }
+
+    /* عکس کم‌رنگ پشت کل سایت */
+    body:after {
+      content:"";
+      position:fixed;
+      inset:0;
+      background:var(--img) center/cover;
+      opacity:.13;
+      filter:blur(3px);
+      pointer-events:none;
+      z-index:-1;
+    }
+
+    /* قاب قدیمی دور صفحه */
+    #fr {
+      position:fixed;
+      inset:6px;
+      border:2px solid #d9a56a66;
+      border-radius:16px;
+      pointer-events:none;
+      z-index:95;
+      box-shadow:inset 0 0 60px #000a;
+    }
+
+    .logo {
+      font-family:'Kaushan Script','Abril Fatface',cursive;
+      font-size:1.7rem;
+      color:var(--cr);
+    }
+
+    header {
+      background:linear-gradient(#0d0703f2,#0d0703aa);
+      border-bottom:1px solid #d9a56a55;
+    }
+
+    /* دکمهٔ «Book a Table» در هدر */
+    .bk {
+      border:1.5px solid var(--ac);
+      color:var(--cr);
+      background:none;
+      border-radius:30px;
+      padding:.25rem 1.1rem;
+      cursor:pointer;
+    }
+
+    .bk:hover {
+      background:var(--ac);
+    }
+
+    @media(max-width:760px) {
+      .bk {
+        display:none;
+      }
+    }
+
+    /* هیرو بازطراحی‌شده با عکس کافه */
+    .hero {
+      position:relative;
+      direction:ltr;
+      align-items:flex-start;
+      justify-content:center;
+      text-align:left;
+      min-height:calc(100vh - 56px);
+      padding:4rem 7vw;
+      gap:1.1rem;
+      background:linear-gradient(90deg,#0d0703f5 0,#0d0703c0 38%,#0d070320 75%,#0d070300),var(--img) center/cover;
+      overflow:hidden;
+    }
+
+    .hero:after {
+      content:"";
+      position:absolute;
+      inset:0;
+      box-shadow:inset 0 0 150px #000;
+      pointer-events:none;
+    }
+
+    .hero>* {
+      position:relative;
+      z-index:2;
+    }
+
+    .eb {
+      letter-spacing:5px;
+      font-size:.75rem;
+      color:var(--cr);
+      opacity:.85;
+      animation:fi 1s;
+    }
+
+    .hero h1 {
+      font-family:'Playfair Display',Georgia,serif;
+      font-weight:900;
+      font-size:clamp(3rem,9vw,6.5rem);
+      line-height:.95;
+      color:#f6e7c8;
+      text-shadow:0 4px 30px #000a;
+    }
+
+    .hero h1 em {
+      display:block;
+      font-family:'Kaushan Script',cursive;
+      font-weight:400;
+      font-style:normal;
+      font-size:1.25em;
+      margin-top:-.05em;
+      background:linear-gradient(#f0a04a,#d9582b);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:none;
+      filter:drop-shadow(0 3px 10px #0008);
+    }
+
+    .hero h3 {
+      font-family:'Playfair Display',serif;
+      font-size:clamp(1.2rem,3vw,1.7rem);
+      max-width:380px;
+      line-height:1.3;
+      animation:fi 1.4s;
+    }
+
+    .hero p {
+      max-width:400px;
+      font-size:.95rem;
+      color:#e6d3b0;
+      direction:rtl;
+      text-align:left;
+    }
+
+    .hb2 {
+      display:flex;
+      gap:1rem;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    /* دکمه‌ها و جزئیات تزئینی هیرو (اسکرول، یادداشت کاغذی، مهر چرخان) */
+    .pill {
+      background:var(--ac);
+      color:#fff;
+      border:0;
+      border-radius:40px;
+      padding:.7rem 1.6rem;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 6px 20px #e8742f55;
+    }
+
+    .pill:hover {
+      filter:brightness(1.1);
+    }
+
+    .pl {
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      background:none;
+      border:0;
+      cursor:pointer;
+      color:var(--cr);
+    }
+
+    .pl i {
+      width:46px;
+      height:46px;
+      border:1.5px solid var(--cr);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-style:normal;
+    }
+
+    .sc {
+      position:absolute!important;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%);
+      text-align:center;
+      font-size:.75rem;
+      opacity:.8;
+    }
+
+    .sc i {
+      display:block;
+      width:18px;
+      height:28px;
+      border:2px solid var(--cr);
+      border-radius:12px;
+      margin:auto;
+    }
+
+    .sc i:after {
+      content:"";
+      display:block;
+      width:3px;
+      height:6px;
+      background:var(--cr);
+      margin:4px auto;
+      border-radius:3px;
+      animation:sd 1.5s infinite;
+    }
+
+    @keyframes sd {
+      50% {
+        transform:translateY(8px);
+        opacity:.3;
+      }
+    }
+
+    .lc {
+      position:absolute!important;
+      bottom:22px;
+      right:6vw;
+      font-size:.85rem;
+    }
+
+    .nt {
+      position:absolute!important;
+      bottom:-10px;
+      left:-10px;
+      width:190px;
+      padding:1.6rem 1.5rem 2rem 2.2rem;
+      background:#c9a577;
+      color:#3a2412;
+      font-family:'Kaushan Script',cursive;
+      font-size:1.3rem;
+      line-height:1.2;
+      transform:rotate(-6deg);
+      clip-path:polygon(0 8%,12% 0,100% 5%,96% 100%,0 100%);
+      box-shadow:0 0 30px #0008;
+      opacity:.93;
+    }
+
+    .sp {
+      position:absolute!important;
+      bottom:26px;
+      left:210px;
+      width:96px;
+      height:96px;
+      border:2px dashed #d9a56a99;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-size:2rem;
+      animation:rt 30s linear infinite;
+    }
+
+    @keyframes rt {
+      to {
+        transform:rotate(360deg);
+      }
+    }
+
+    @media(max-width:760px) {
+      .hero {
+        background:linear-gradient(180deg,#0d0703ee 0,#0d070390 55%,#0d0703d0),var(--img) 70% center/cover;
+        padding:3rem 1.4rem 6rem;
+      }
+      .nt,.sp,.lc {
+        display:none;
+      }
+    }
+
+    /* رنگ کارت‌ها در تم ریترو */
+    .it,.bx {
+      background:linear-gradient(#2b1a0fee,#1f1209ee);
+      border-color:#8a6a45;
+    }
+
+    /* بخش ۸ — اصلاح پس‌زمینهٔ هیرو: عکس سمت راست و محو شدن سمت چپ */
+    .hero {
+      background:linear-gradient(90deg,#0d0703 0,#0d0703f2 28%,#0d070390 52%,#0d070300 80%),var(--img) right center/auto 100% no-repeat,#0d0703;
+    }
+
+    body:after {
+      opacity:.1;
+    }
+
+    @media(max-width:760px) {
+      .hero {
+        background:linear-gradient(180deg,#0d0703f0 0,#0d070395 55%,#0d0703e0),var(--img) 40% center/cover no-repeat,#0d0703;
+      }
+    }
+
+    /* بخش ۹ — نوار متحرک حرفه‌ای، دکمهٔ موزیک و دکمهٔ ورود */
+    [hidden] {
+      display:none!important;
+    }
+
+    .mq {
+      background:linear-gradient(#0d0703,#1b1009);
+      border-block:1px solid #d9a56a99;
+      padding:.85rem 0;
+      direction:ltr;
+      overflow:hidden;
+      -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+      mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+    }
+
+    .mq .tr {
+      display:inline-flex;
+      align-items:center;
+      gap:1.6rem;
+      white-space:nowrap;
+      animation:mq2 60s linear infinite;
+      font-weight:400;
+    }
+
+    .mq:hover .tr {
+      animation-play-state:paused;
+    }
+
+    .mq span {
+      font-family:'Playfair Display',serif;
+      font-size:.8rem;
+      letter-spacing:.32em;
+      text-transform:uppercase;
+      color:var(--cr);
+    }
+
+    .mq i {
+      font-style:normal;
+      color:var(--go);
+      font-size:.7rem;
+    }
+
+    @keyframes mq2 {
+      to {
+        transform:translateX(-50%);
+      }
+    }
+
+    /* دکمهٔ پخش/توقف موزیک (اصلاح‌شده: همیشه دیده می‌شود و متن دارد) */
+    #mb {
+      position:fixed;
+      left:16px;
+      bottom:22px;
+      padding:.55rem 1.1rem;
+      border-radius:30px;
+      border:1.5px solid var(--go);
+      background:#120a05ee;
+      font-size:.9rem;
+      font-weight:700;
+      cursor:pointer;
+      z-index:70;
+      box-shadow:0 0 16px #e8742f55;
+    }
+
+    @media(max-width:760px) {
+      #mb {
+        bottom:calc(76px + env(safe-area-inset-bottom,0px));
+      }
+    }
+
+    #en {
+      margin-top:.6rem;
+      animation:fi .6s;
+    }
+
+    /* بخش ۱۰ — عکس آیتم‌های منو (اگر عکس پیدا نشود، ایموجی نمایش داده می‌شود) */
+    .ph {
+      position:relative;
+      aspect-ratio:4/3;
+      border-radius:8px;
+      overflow:hidden;
+      margin-bottom:.6rem;
+      background:#120a05;
+      display:grid;
+      place-items:center;
+      font-size:2.8rem;
+    }
+
+    .ph img {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      transition:transform .4s;
+    }
+
+    .it:hover .ph img {
+      transform:scale(1.07);
+    }
+  </style>
+</head>
+<body>
+  <!-- صفحهٔ لودینگ (فنجان قهوه متحرک؛ با پایان لودینگ یا کلیک روی «ورود به کافه» بسته می‌شود) -->
+  <div id="ld">
+    <svg viewBox="0 0 120 120">
+      <path class="st" d="M40 55 Q30 40 40 28 T40 5"/>
+      <path class="st" d="M60 55 Q50 40 60 28 T60 5"/>
+      <path class="st" d="M80 55 Q70 40 80 28 T80 5"/>
+      <defs>
+        <clipPath id="cp">
+          <path d="M20 62h72v22a30 26 0 0 1-30 26H50A30 26 0 0 1 20 84z"/>
+        </clipPath>
+      </defs>
+      <g clip-path="url(#cp)">
+        <rect x="15" y="60" width="85" height="60" fill="#6b3a1c" id="fl"/>
+      </g>
+      <path d="M20 62h72v22a30 26 0 0 1-30 26H50A30 26 0 0 1 20 84zM92 70h8a10 12 0 0 1 0 24h-10" fill="none" stroke="#f3e2c0" stroke-width="5" stroke-linejoin="round"/>
+    </svg>
+    <div class="lg">The Daily Brew</div>
+    <div class="bar"><i></i></div>
+    <div class="sm">در حال دم کردن قهوه...</div>
+    <button class="pill" id="en" hidden onclick="enter()">ورود به کافه ☕</button>
+  </div>
+  <!-- هدر: لوگو، منو (در موبایل نوار پایین صفحه) و دکمهٔ رزرو -->
+  <header>
+    <div class="logo" onclick="go('home')">☕ The Daily Brew</div>
+    <nav id="nv">
+      <button data-v="home" onclick="go('home')"><span>🏠</span>خانه</button>
+      <button onclick="go('home','menu')"><span>☕</span>منو</button>
+      <button onclick="go('home','reserve')"><span>📅</span>رزرو</button>
+      <button data-v="order" onclick="go('order')"><span>🛒</span>سفارش<b id="cb">0</b></button>
+      <button data-v="profile" onclick="go('profile')"><span>👤</span>پروفایل</button>
+    </nav>
+    <button class="bk" onclick="go('home','reserve')">Book a Table</button>
+  </header>
+  <!-- موزیک پس‌زمینه (فایل music.mp3 باید کنار index.html باشد) + دکمهٔ پخش/توقف -->
+  <audio id="bgm" src="music.mp3" loop preload="auto"></audio>
+  <button id="mb" onclick="tm()" title="پخش / توقف موزیک">▶ پخش موزیک</button>
+  <!-- قاب قدیمی دور صفحه -->
+  <div id="fr"></div>
+  <!-- محل نمایش پیام‌های کوتاه (Toast) -->
+  <div id="ts"></div>
+  <!-- محتوای اصلی؛ هر صفحه یک بخش .view است و با go() عوض می‌شود -->
+  <main>
+    <!-- صفحهٔ اصلی -->
+    <div class="view" id="v-home">
+      <!-- هیرو (بالای صفحه) -->
+      <div class="hero">
+        <div class="eb">GOOD COFFEE &nbsp;×&nbsp; GOOD MOOD</div>
+        <h1>The Daily<em>Brew</em></h1>
+        <h3>More than just coffee, it's a feeling.</h3>
+        <p>به دنیای گرم و نوستالژیک قهوه‌های خوب و لحظه‌های فراموش‌نشدنی خوش آمدید.</p>
+        <div class="hb2">
+          <button class="pill" onclick="go('home','menu')">Explore Menu →</button>
+          <button class="pl" onclick="go('home','reserve')"><i>▶</i><span>رزرو میز</span></button>
+        </div>
+        <div class="nt">Good<br>Things<br>Take Time ☺</div>
+        <div class="sp">☕</div>
+        <div class="sc"><i></i>Scroll Down</div>
+        <div class="lc">📍 Bandar Abbas, Iran</div>
+      </div>
+      <!-- نوار متحرک زیر هیرو -->
+      <div class="mq">
+        <div class="tr"><span>Fresh Roasted Coffee</span><i>✦</i><span>Handcrafted Daily</span><i>✦</i><span>Homemade Pastries</span><i>✦</i><span>Since 1985</span><i>✦</i><span>Bandar Abbas</span><i>✦</i><span>Fresh Roasted Coffee</span><i>✦</i><span>Handcrafted Daily</span><i>✦</i><span>Homemade Pastries</span><i>✦</i><span>Since 1985</span><i>✦</i><span>Bandar Abbas</span><i>✦</i><span>Fresh Roasted Coffee</span><i>✦</i><span>Handcrafted Daily</span><i>✦</i><span>Homemade Pastries</span><i>✦</i><span>Since 1985</span><i>✦</i><span>Bandar Abbas</span><i>✦</i><span>Fresh Roasted Coffee</span><i>✦</i><span>Handcrafted Daily</span><i>✦</i><span>Homemade Pastries</span><i>✦</i><span>Since 1985</span><i>✦</i><span>Bandar Abbas</span><i>✦</i></div>
+      </div>
+      <div class="w">
+        <!-- منوی دیجیتال -->
+        <section class="p" id="menu">
+          <h2>منوی دیجیتال</h2>
+          <div class="chips" id="chips"></div>
+          <div class="grid" id="mg"></div>
+        </section>
+        <!-- رزرو میز -->
+        <section class="p" id="reserve">
+          <h2>رزرو میز</h2>
+          <div class="bx">
+            <div class="fm">
+              <div>
+                <label>نام</label>
+                <input id="rn">
+              </div>
+              <div>
+                <label>تلفن</label>
+                <input id="rp" type="tel">
+              </div>
+              <div>
+                <label>تاریخ</label>
+                <input id="rd" type="date">
+              </div>
+              <div>
+                <label>ساعت</label>
+                <input id="rt" type="time" value="18:00">
+              </div>
+              <div>
+                <label>تعداد نفرات</label>
+                <select id="rg">
+                  <option>1</option>
+                  <option>2</option>
+                  <option selected>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                  <option>6</option>
+                  <option>8</option>
+                </select>
+              </div>
+              <div class="f">
+                <button class="btn" onclick="book()">ثبت رزرو</button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- امتیاز و نظرات -->
+        <section class="p" id="reviews">
+          <h2>امتیاز و نظرات</h2>
+          <div class="bx">
+            <div style="text-align:center;font-size:1.3rem" id="avg"></div>
+            <div class="fm">
+              <div class="f stars" id="stars" style="text-align:center"></div>
+              <div>
+                <input id="vn" placeholder="نام شما">
+              </div>
+              <div class="f">
+                <textarea id="vt" rows="2" placeholder="نظر شما..."></textarea>
+              </div>
+              <div class="f">
+                <button class="btn" onclick="addRev()">ثبت نظر</button>
+              </div>
+            </div>
+            <div id="rl"></div>
+          </div>
+        </section>
+        <!-- موقعیت کافه -->
+        <section class="p" id="loc">
+          <h2>موقعیت کافه</h2>
+          <div class="map">
+            <div class="pin">📍</div>
+            <h3>The Daily Brew</h3>
+            <p>بندرعباس، داماهی گوهران ۳۵</p>
+            <p class="sm">همه‌روزه ۸ صبح تا ۱۲ شب</p><br><a class="btn" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Bandar+Abbas+Damahi+Gohran+35">مسیریابی در نقشه</a>
+          </div>
+        </section>
+      </div>
+    </div>
+    <!-- صفحهٔ سفارش -->
+    <div class="view w" id="v-order" hidden>
+      <section class="p">
+        <h2>سفارش شما</h2>
+        <div class="bx" id="ol"></div>
+        <div class="bx fm" id="of"></div>
+        <h2 style="font-size:1.4rem">سفارش‌های قبلی</h2>
+        <div class="bx" id="oh"></div>
+      </section>
+    </div>
+    <!-- صفحهٔ پروفایل مشتری -->
+    <div class="view w" id="v-profile" hidden>
+      <section class="p">
+        <h2>پروفایل مشتری</h2>
+        <div class="bx">
+          <div class="fm">
+            <div>
+              <label>نام</label>
+              <input id="pn">
+            </div>
+            <div>
+              <label>تلفن</label>
+              <input id="pp" type="tel">
+            </div>
+            <div class="f">
+              <button class="btn" onclick="saveP()">ذخیره</button>
+            </div>
+          </div>
+        </div>
+        <h2 style="font-size:1.4rem">❤️ علاقه‌مندی‌ها</h2>
+        <div class="grid" id="fg"></div>
+        <h2 style="font-size:1.4rem;margin-top:1.5rem">سفارش‌ها و رزروهای من</h2>
+        <div class="bx" id="mh"></div>
+      </section>
+    </div>
+    <!-- پنل مدیریت -->
+    <div class="view w" id="v-admin" hidden>
+      <section class="p">
+        <h2>پنل مدیریت</h2>
+        <!-- فرم ورود مدیر -->
+        <div class="bx fm" id="lg" style="max-width:420px;margin:auto">
+          <div class="f">
+            <label>نام کاربری</label>
+            <input id="lu" autocomplete="username">
+          </div>
+          <div class="f">
+            <label>رمز عبور</label>
+            <input id="lp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+          </div>
+          <div class="f">
+            <button class="btn" onclick="login()">ورود</button>
+          </div>
+        </div>
+        <!-- محتوای پنل (بعد از ورود نمایش داده می‌شود) -->
+        <div id="ad" hidden>
+          <div style="margin-bottom:.8rem">
+            <button class="btn o s" onclick="A()">🔄 بروزرسانی</button>
+            <button class="btn o s" onclick="logout()">خروج</button>
+          </div>
+          <div class="sg" id="sg"></div>
+          <div class="bx">
+            <h3>سفارش بر اساس دسته</h3>
+            <div class="ch" id="ch"></div>
+          </div>
+          <div class="bx">
+            <h3>سفارش‌ها</h3>
+            <div class="tb" id="ao"></div>
+          </div>
+          <div class="bx">
+            <h3>رزروها</h3>
+            <div id="ar"></div>
+          </div>
+          <div class="bx">
+            <h3>نظرات مشتری‌ها</h3>
+            <div id="arv"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <!-- فوتر: نشانی، اعتبار سازنده و لینک‌ها -->
+  <footer>
+    <div class="lg" style="font-size:1.4rem;color:var(--go)">The Daily Brew</div>
+    <p>بندرعباس، داماهی گوهران ۳۵</p>
+    <p style="margin-top:.8rem">ساخته‌شده با ☕ توسط <b style="color:var(--cr)">alirezakarimi</b></p>
+    <p><a target="_blank" rel="noopener" href="https://instagram.com/alirezw.dev">Instagram: alirezw.dev</a><a target="_blank" rel="noopener" href="https://t.me/alirezakarimili">Telegram: alirezakarimili</a></p>
+    <p style="margin-top:.6rem">
+      <button class="btn o s" onclick="adm()">🔐 ورود مدیر</button>
+    </p>
+  </footer>
+
+  <script>
+
+    // ===================== بخش ۱: ابزارهای کمکی =====================
+    // $ میانبر انتخاب المان، F فرمت قیمت به تومان، N فرمت عدد فارسی
+    const $=s=>document.querySelector(s),
+      F=n=>(n*1000).toLocaleString('fa-IR')+' تومان',
+      N=n=>n.toLocaleString('fa-IR');
+
+    // S خواندن امن از localStorage و W نوشتن امن در آن (پیشوند db_)
+    const S=(k,d)=>{
+      try{
+        const v=localStorage.getItem('db_'+k);
+        return v?JSON.parse(v):d
+      }catch(e){
+        return d
+      }
+    },
+      W=(k,v)=>{
+      try{
+        localStorage.setItem('db_'+k,JSON.stringify(v))
+      }catch(e){}
+      };
+
+    // جلوگیری از تزریق کد (XSS) در متن‌هایی که کاربر وارد می‌کند
+    const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+    // ===================== بخش ۲: داده‌ها و وضعیت برنامه =====================
+    // آیتم‌های منو: [شناسه، نام، دسته، قیمت (هزار تومان)، ایموجی، توضیح]
+    const M=[[1,'اسپرسو','قهوه',45,'☕','تک‌شات، غلیظ و اصیل'],[2,'کاپوچینو','قهوه',65,'🥛','اسپرسو با فوم شیر ابریشمی'],[3,'لاته','قهوه',68,'☕','ملایم و شیری'],[4,'ترک','قهوه',50,'🫖','قهوهٔ سنتی روی آتش'],[5,'آیس‌لاته','نوشیدنی سرد',75,'🧊','لاته سرد با یخ'],[6,'لیموناد نعنا','نوشیدنی سرد',55,'🍋','خنک و ترش‌وشیرین'],[7,'میلک‌شیک شکلات','نوشیدنی سرد',85,'🥤','شکلات تلخ و بستنی'],[8,'کیک شکلاتی','دسر',90,'🍰','دستپخت خانگی'],[9,'چیزکیک','دسر',95,'🧁','با سس توت‌فرنگی'],[10,'کروسان کره‌ای','دسر',60,'🥐','تازه و ترد'],[11,'ساندویچ مرغ','غذا',120,'🥪','نان گندم، مرغ گریل'],[12,'املت','غذا',100,'🍳','صبحانهٔ سنتی']];
+
+    // دسته‌بندی‌های منو
+    const C=['همه','قهوه','نوشیدنی سرد','دسر','غذا'];
+
+    // وضعیت برنامه: سبد، علاقه‌مندی‌ها، سفارش‌ها، رزروها، پروفایل، دستهٔ انتخابی، امتیاز انتخابی و حالت مدیر
+    let cart=S('cart',{}),
+      fav=S('fav',[]),
+      orders=S('orders',[]),
+      res=S('res',[]),
+      prof=S('prof',{n:'',p:''}),
+      cat='همه',
+      st=0,
+      isAdm=false;
+
+    // نظرات پیش‌فرض (تا وقتی نظرات واقعی از سرور بیایند)
+    let rev=S('rev',[{n:'سارا',s:5,t:'بهترین کاپوچینوی شهر! فضای کافه عالیه.'},{n:'محمد',s:4,t:'کیک شکلاتی فوق‌العاده بود.'},{n:'نگار',s:5,t:'دکوراسیون قدیمی و دلنشین، حتماً برمی‌گردم.'}]);
+
+    // ===================== بخش ۳: رابط کاربری و رندر =====================
+    // نمایش پیام کوتاه زیر هدر
+    function toast(t){
+      const e=$('#ts');
+      e.textContent=t;
+      e.classList.add('on');
+      setTimeout(()=>e.classList.remove('on'),2000)
+    }
+
+    // تغییر صفحه (home / order / profile / admin) و اسکرول به بخش دلخواه
+    function go(v,sec){
+      document.querySelectorAll('.view').forEach(e=>e.hidden=e.id!=='v-'+v);
+      document.querySelectorAll('#nv button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+      R();
+      setTimeout(()=>{
+        sec?$('#'+sec).scrollIntoView():window.scrollTo(0,0)
+      },30)
+    }
+
+    // ساخت HTML کارت یک آیتم منو
+    function card(m,f){
+      const[i,n,c,p,e,d,img='img/'+i+'.jpg']=m;
+      return`<div class="it"><button class="hb" onclick="tf(${i})">${fav.includes(i)?'❤️':'🤍'}</button><div class="ph"><span>${e}</span><img src="${img}" alt="${n}" loading="lazy" onerror="this.remove()"></div><h3>${n}</h3><p>${d}</p><div class="pr">${F(p)}</div><button class="btn s" onclick="add(${i})">+ افزودن به سفارش</button></div>`
+    }
+
+    // رندر کل صفحه: منو، نظرات، سبد، سفارش‌ها، علاقه‌مندی‌ها و پروفایل
+    function R(){
+      // دکمه‌های دسته‌بندی منو
+      $('#chips').innerHTML=C.map(c=>`<button class="${c===cat?'on':''}" onclick="cat='${c}';R()">${c}</button>`).join('');
+      // کارت‌های منو (بر اساس دستهٔ انتخاب‌شده)
+      $('#mg').innerHTML=M.filter(m=>cat==='همه'||m[2]===cat).map(card).join('');
+      // میانگین امتیاز و تعداد نظرها
+      const a=rev.length?rev.reduce((x,r)=>x+r.s,0)/rev.length:0;
+      $('#avg').innerHTML=`<span class="str">${'★'.repeat(Math.round(a))}${'☆'.repeat(5-Math.round(a))}</span> ${N(+a.toFixed(1))} از ۵ (${N(rev.length)} نظر)`;
+      // ستاره‌های انتخاب امتیاز
+      $('#stars').innerHTML=[1,2,3,4,5].map(i=>`<span class="${i<=st?'on':''}" onclick="st=${i};R()">★</span>`).join('');
+      // لیست نظرات مشتری‌ها
+      $('#rl').innerHTML=rev.map(r=>`<div class="rv"><b>${esc(r.n)}</b> <span class="str">${'★'.repeat(r.s)}</span><br>${esc(r.t)}</div>`).join('');
+      // محاسبهٔ سبد خرید و جمع کل
+      const ids=Object.keys(cart).filter(k=>cart[k]>0),
+        tot=ids.reduce((s,k)=>s+M.find(m=>m[0]==k)[3]*cart[k],0);
+      // عدد روی آیکون سبد سفارش
+      $('#cb').textContent=N(ids.reduce((s,k)=>s+cart[k],0));
+      // لیست آیتم‌های سبد سفارش
+      $('#ol').innerHTML=ids.length?ids.map(k=>{
+        const m=M.find(m=>m[0]==k);
+        return`<div class="row"><span>${m[4]} ${m[1]}</span><span class="q"><button onclick="qty(${k},1)">+</button>${N(cart[k])}<button onclick="qty(${k},-1)">−</button></span><b>${F(m[3]*cart[k])}</b></div>`
+      }).join('')+`<div class="row"><b>جمع کل</b><b style="color:var(--go)">${F(tot)}</b></div>`:'<p>سبد سفارش خالی است. از منو آیتم اضافه کنید ☕</p>';
+      // فرم ثبت نهایی سفارش
+      $('#of').innerHTML=ids.length?`<div><label>نام</label><input id="on" value="${esc(prof.n)}"></div><div><label>تلفن</label><input id="op" value="${esc(prof.p)}"></div><div><label>نوع سفارش</label><select id="ot"><option>سرو در کافه</option><option>بیرون‌بر</option></select></div><div><label>شمارهٔ میز</label><input id="om" type="number" min="1" max="30" value="1"></div><div class="f"><button class="btn" onclick="place()">ثبت نهایی سفارش</button></div>`:'';
+      // سفارش‌های قبلی
+      $('#oh').innerHTML=orders.length?orders.slice().reverse().map(oRow).join(''):'<p class="sm">هنوز سفارشی ثبت نشده.</p>';
+      // علاقه‌مندی‌ها
+      $('#fg').innerHTML=fav.length?M.filter(m=>fav.includes(m[0])).map(card).join(''):'<p class="sm">هنوز آیتمی را دوست نداشته‌اید 🤍</p>';
+      // سابقهٔ سفارش‌ها و رزروهای من
+      $('#mh').innerHTML=orders.concat([]).reverse().map(oRow).join('')+res.slice().reverse().map(r=>`<div class="row"><span>📅 رزرو ${esc(r.d)} ساعت ${esc(r.t)} · ${N(+r.g)} نفر</span></div>`).join('')||'<p class="sm">سابقه‌ای نیست.</p>';
+      // پر کردن فرم پروفایل (فقط وقتی کاربر در حال تایپ نیست)
+      if(document.activeElement.tagName!=='INPUT'){
+        $('#pn').value=prof.n;
+        $('#pp').value=prof.p
+      }
+      // اگر مدیر وارد شده، پنل مدیریت هم به‌روز شود
+      if(isAdm&&!$('#v-admin').hidden)A()
+    }
+
+    // یک ردیف از لیست سفارش‌ها
+    const oRow=o=>`<div class="row"><span>#${N(o.id)} · ${o.it.map(i=>i.n+'×'+N(i.q)).join('، ')}</span><span><b>${F(o.t)}</b> <span class="sm">${o.s}</span></span></div>`;
+
+    // ===================== بخش ۴: عملیات کاربر =====================
+    // افزودن یا حذف آیتم از علاقه‌مندی‌ها
+    function tf(i){
+      fav=fav.includes(i)?fav.filter(x=>x!==i):[...fav,i];
+      W('fav',fav);
+      R()
+    }
+
+    // افزودن یک عدد به سبد سفارش
+    function add(i){
+      cart[i]=(cart[i]||0)+1;
+      W('cart',cart);
+      R();
+      toast('به سفارش اضافه شد ✓')
+    }
+
+    // تغییر تعداد آیتم در سبد
+    function qty(i,d){
+      cart[i]=Math.max(0,(cart[i]||0)+d);
+      W('cart',cart);
+      R()
+    }
+
+    // ثبت نهایی سفارش (ذخیره در مرورگر + ارسال به سرور)
+    function place(){
+      const n=$('#on').value.trim(),
+        p=$('#op').value.trim();
+      if(!n||!p)return toast('نام و تلفن را وارد کنید');
+      // ساخت لیست آیتم‌های سفارش از روی سبد
+      const it=Object.keys(cart).filter(k=>cart[k]>0).map(k=>{
+        const m=M.find(m=>m[0]==k);
+        return{n:m[1],q:cart[k],c:m[2],p:m[3]}
+      });
+      // ذخیرهٔ سفارش در مرورگر + ارسال به سرور
+      orders.push({id:orders.length+1001,it,t:it.reduce((s,i)=>s+i.p*i.q,0),s:'در انتظار',n,p,ty:$('#ot').value,tb:$('#om').value,d:new Date().toLocaleDateString('fa-IR')});
+      W('orders',orders);
+      api('/api/orders',{method:'POST',body:orders[orders.length-1]});
+      cart={};
+      W('cart',cart);
+      R();
+      toast('سفارش ثبت شد 🎉')
+    }
+
+    // ثبت رزرو میز (ذخیره در مرورگر + ارسال به سرور)
+    function book(){
+      const n=$('#rn').value.trim(),
+        p=$('#rp').value.trim(),
+        d=$('#rd').value,
+        t=$('#rt').value;
+      if(!n||!p||!d||!t)return toast('همهٔ فیلدها را پر کنید');
+      // ذخیرهٔ رزرو در مرورگر + ارسال به سرور
+      res.push({n,p,d,t,g:$('#rg').value});
+      W('res',res);
+      api('/api/reservations',{method:'POST',body:res[res.length-1]});
+      toast('میز شما رزرو شد ✓');
+      ['rn','rp','rd'].forEach(i=>$('#'+i).value='')
+    }
+
+    // ذخیرهٔ پروفایل مشتری
+    function saveP(){
+      prof={n:$('#pn').value,p:$('#pp').value};
+      W('prof',prof);
+      toast('پروفایل ذخیره شد')
+    }
+
+    // ===================== بخش ۵: ارتباط با سرور و پنل مدیریت =====================
+    // توکن ورود مدیر (در sessionStorage می‌ماند)
+    let tok='';
+    try{
+      tok=sessionStorage.tok||''
+    }catch(e){}
+
+    // ارسال درخواست به سرور؛ در صورت خطا null برمی‌گرداند
+    async function api(u,o={}){
+      try{
+        const r=await fetch(u,{method:o.method||'GET',headers:{'Content-Type':'application/json',...(tok?{Authorization:'Bearer '+tok}:{})},body:o.body?JSON.stringify(o.body):undefined});
+        return r.ok?await r.json():null
+      }catch(e){
+        return null
+      }
+    }
+
+    // دریافت نظرات از سرور
+    async function loadRev(){
+      const d=await api('/api/reviews');
+      if(d){
+        rev=d;
+        R()
+      }
+    }
+
+    // باز کردن صفحهٔ مدیریت
+    function adm(){
+      go('admin');
+      showAdm()
+    }
+
+    // نمایش فرم ورود یا پنل (بسته به وجود توکن)
+    function showAdm(){
+      isAdm=!!tok;
+      $('#lg').hidden=isAdm;
+      $('#ad').hidden=!isAdm;
+      if(isAdm)A()
+    }
+
+    // ورود مدیر با نام کاربری و رمز
+    async function login(){
+      const r=await api('/api/admin/login',{method:'POST',body:{u:$('#lu').value,p:$('#lp').value}});
+      if(!r)return toast('نام کاربری یا رمز اشتباه است');
+      tok=r.token;
+      try{
+        sessionStorage.tok=tok
+      }catch(e){}
+      $('#lp').value='';
+      showAdm()
+    }
+
+    // خروج مدیر
+    function logout(){
+      tok='';
+      try{
+        delete sessionStorage.tok
+      }catch(e){}
+      showAdm()
+    }
+
+    // بارگذاری و نمایش داده‌های پنل مدیریت
+    async function A(){
+      const d=await api('/api/admin/data');
+      // اگر توکن منقضی شده باشد به فرم ورود برمی‌گردیم
+      if(!d){
+        tok='';
+        try{
+          delete sessionStorage.tok
+        }catch(e){}
+        isAdm=false;
+        $('#lg').hidden=false;
+        $('#ad').hidden=true;
+        return toast('ورود منقضی شد؛ دوباره وارد شوید')
+      }
+      // محاسبهٔ درآمد کل و میانگین امتیاز
+      const rv=d.orders.reduce((s,o)=>s+o.t,0),
+        av=d.rev.length?d.rev.reduce((x,r)=>x+r.s,0)/d.rev.length:0;
+      // کارت‌های آمار
+      $('#sg').innerHTML=[['سفارش‌ها',N(d.orders.length)],['درآمد',F(rv/1000)],['رزروها',N(d.res.length)],['امتیاز',N(+av.toFixed(1))+' ★']].map(x=>`<div class="bx"><b>${x[1]}</b>${x[0]}</div>`).join('');
+      // جمع تعداد سفارش هر دسته
+      const cs={};
+      d.orders.forEach(o=>o.it.forEach(i=>cs[i.c]=(cs[i.c]||0)+i.q));
+      const mx=Math.max(1,...Object.values(cs));
+      // نمودار میله‌ای دسته‌ها
+      $('#ch').innerHTML=C.slice(1).map(c=>`<div><span style="width:90px">${c}</span><i style="width:${(cs[c]||0)/mx*60}%;min-width:4px"></i> ${N(cs[c]||0)}</div>`).join('');
+      // جدول سفارش‌ها با امکان تغییر وضعیت
+      $('#ao').innerHTML=d.orders.length?d.orders.map(o=>`<div class="row"><span>#${N(o.id)} ${esc(o.n)} (${esc(o.p)}) · ${esc(o.ty)} · میز ${esc(o.tb)}<br><span class="sm">${o.it.map(i=>esc(i.n)+'×'+N(i.q)).join('، ')}</span></span><span>${F(o.t/1000)} <select onchange="stt(${o.id},this.value)" style="background:#120a05;border:1px solid var(--mu);border-radius:6px">${['در انتظار','در حال آماده‌سازی','تحویل شد','لغو'].map(s=>`<option ${s===o.s?'selected':''}>${s}</option>`).join('')}</select></span></div>`).join(''):'<p class="sm">سفارشی نیست.</p>';
+      // لیست رزروها
+      $('#ar').innerHTML=d.res.length?d.res.map(r=>`<div class="row"><span>📅 ${esc(r.n)} (${esc(r.p)}) · ${esc(r.d)} ${esc(r.t)} · ${N(+r.g)} نفر</span></div>`).join(''):'<p class="sm">رزروی نیست.</p>';
+      // لیست نظرات با دکمهٔ حذف
+      $('#arv').innerHTML=d.rev.length?d.rev.map(r=>`<div class="row"><span><b>${esc(r.n)}</b> <span class="str">${'★'.repeat(r.s)}</span><br>${esc(r.t)}</span><button class="btn o s" onclick="delRev(${r.id})">حذف</button></div>`).join(''):'<p class="sm">نظری نیست.</p>'
+    }
+
+    // تغییر وضعیت سفارش
+    async function stt(id,s){
+      await api('/api/admin/orders/'+id,{method:'PATCH',body:{s}});
+      A()
+    }
+
+    // حذف یک نظر
+    async function delRev(id){
+      if(confirm('این نظر حذف شود؟')){
+        await api('/api/admin/reviews/'+id,{method:'DELETE'});
+        A();
+        loadRev()
+      }
+    }
+
+    // ثبت نظر جدید (ارسال به سرور)
+    async function addRev(){
+      const n=$('#vn').value.trim()||'ناشناس',
+        t=$('#vt').value.trim();
+      if(!st||!t)return toast('امتیاز و متن نظر را وارد کنید');
+      // ارسال نظر به سرور؛ اگر سرور نبود فقط محلی ذخیره می‌شود
+      const ok=await api('/api/reviews',{method:'POST',body:{n,s:st,t}});
+      if(!ok){
+        rev.unshift({n,s:st,t});
+        W('rev',rev)
+      }
+      st=0;
+      $('#vt').value='';
+      ok?loadRev():R();
+      toast('ممنون از نظر شما ❤️')
+    }
+
+    // ===================== بخش ۶: موزیک پس‌زمینه =====================
+    // المان صدا و حالت بی‌صدا (ذخیره‌شده در localStorage)
+    const bg=$('#bgm');
+    let mute=false;
+    try{
+      mute=localStorage.mute==='1'
+    }catch(e){}
+
+    // نوشتن متن دکمهٔ موزیک بر اساس حالت پخش (اصلاح‌شده)
+    function mb(){
+      $('#mb').textContent=bg.paused?'▶ پخش موزیک':'⏸ توقف موزیک'
+    }
+
+    // تلاش برای پخش موزیک (اگر کاربر خاموشش نکرده باشد)
+    function pl(){
+      if(mute)return;
+      bg.volume=.45;
+      bg.play().then(mb).catch(()=>{})
+    }
+
+    // دکمهٔ پخش/توقف موزیک (اصلاح‌شده: خطا را به کاربر نشان می‌دهد)
+    function tm(){
+      if(bg.paused){
+        mute=false;
+        bg.volume=.45;
+        bg.play().then(mb).catch(()=>toast('فایل music.mp3 پیدا نشد یا پخش ممکن نیست'))
+      }else{
+        bg.pause();
+        mute=true
+      }
+      try{
+        localStorage.mute=mute?'1':'0'
+      }catch(e){}
+      mb()
+    }
+
+    // بستن لودینگ و شروع موزیک با کلیک کاربر
+    function enter(){
+      $('#ld').classList.add('x');
+      pl()
+    }
+    // اگر فایل موزیک پیدا نشد پیام بده؛ و بعد از اولین تعامل کاربر پخش را امتحان کن (اصلاح‌شده)
+    bg.onerror=()=>{
+      toast('فایل music.mp3 را کنار index.html بگذارید')
+    };
+    bg.onplay=mb;
+    bg.onpause=mb;
+    ['pointerdown','keydown','touchstart'].forEach(e=>addEventListener(e,pl,{once:true}));
+
+    // ===================== بخش ۷: شروع برنامه =====================
+    // رندر اولیه، گرفتن نظرات از سرور و تلاش برای پخش موزیک
+    R();
+    loadRev();
+    pl();
+    if(tok)isAdm=true;
+    // بعد از ۲.۹ ثانیه لودینگ بسته می‌شود؛ اگر مرورگر پخش خودکار را نداد، دکمهٔ «ورود به کافه» نشان داده می‌شود
+    setTimeout(()=>{
+      if(!bg.paused||mute||bg.error)$('#ld').classList.add('x');
+      else $('#en').hidden=false
+    },2900);
+  </script>
+</body>
+</html>
